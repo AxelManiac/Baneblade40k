@@ -84,12 +84,15 @@ public class Baneblade40k extends AdvancedRobot
 			setAhead((e.getDistance() - 140) * moveDirection);																				// Move forward towards the enemy until under 150px;
 		}
 		else{
+			// Once we are close set max velocity and turn rate to maximum allowed values.
+			setMaxVelocity(Rules.MAX_TURN_RATE);
+			setMaxTurnRate(Rules.MAX_VELOCITY);
 			avoidEnemyFire(e);										// Detect incoming fire and try to randomly avoid the bullets.
 			setTurnLeft(-90 - e.getBearing()); 						// Turn perpendicular to the enemy.
-			if (getTime() % 20 == 0) {								// Every 20 ticks change the direction we are circling the enemy.
+			if (getTime() % 5 == 0) {								// Every 5 ticks change the direction we are circling the enemy.
 				moveDirection = -moveDirection;
 				setAhead((e.getDistance() - 140) * moveDirection);	// Start circling the enemy.
-				moveDirection = -moveDirection;						// Reset the move direction.
+				moveDirection = 1;									// Reset the move direction.
 			}
 		}	
 	}
@@ -118,14 +121,14 @@ public class Baneblade40k extends AdvancedRobot
 			
 			// Randomly turn left or right.
 			if(Math.random() > 0.7){
-				setTurnLeft(90 * turnDirection);
+				setTurnLeft(120 * turnDirection);
 			}
 			else {
-				setTurnRight(90 * turnDirection);
+				setTurnRight(120 * turnDirection);
 			}
 
 			// Move ahead for a set distance.
-			setAhead(90 * moveDirection);
+			setAhead(120 * moveDirection);
 			
 			// Reset turn and move directions.
 			turnDirection = 1;
@@ -141,7 +144,7 @@ public class Baneblade40k extends AdvancedRobot
 		double enemyLateralVelocity = e.getVelocity() * Math.sin(e.getHeadingRadians() - enemyAbsoluteBearing);		// Enemy lateral velocity.
 		
 		// Default bot size is 36x36. Lead the shot by half the size of a bot.
-		double leadingBulletAmount = 18;	
+		double leadingBulletAmount = 22;	
 		
 		// Rotate the gun to target using a leading shot.
 		double gunTurnAmount = Utils.normalRelativeAngle(enemyAbsoluteBearing - getGunHeadingRadians() + enemyLateralVelocity / leadingBulletAmount);
